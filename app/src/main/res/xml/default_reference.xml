@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#334445">
+
+	<PreferenceCategory 
+		    android:title="@string/first_preferences_category">
+    <ListPreference
+            android:key="default_Sensitivity"
+            android:defaultValue="@string/default_value_sensi_preference"
+            android:title="@string/title_sensi_preference"
+            android:summary="@string/summary_sensi_preference"
+            android:entries="@array/entries_sensi_preference"
+            android:entryValues="@array/entryvalues_sensi_preference"
+            android:dialogTitle="@string/dialog_title_sensi_preference" /> 
+    
+    <EditTextPreference
+            android:key="default_AlarmInfo"
+            android:defaultValue="@string/default_value_alarminfo_preference"
+            android:title="@string/title_alarminfo_preference"
+            android:summary="@string/summary_alarminfo_preference"
+            android:dialogTitle="@string/dialog_title_alarminfo_preference" />
+    </PreferenceCategory>             
+          
+	<PreferenceCategory  
+		    android:title="@string/second_preferences_category">            
+    <ListPreference
+            android:key="default_Sound"
+            android:defaultValue="@string/default_value_sound_preference"
+            android:title="@string/title_sound_preference"
+            android:summary="@string/summary_sound_preference"
+            android:entries="@array/entries_sound_preference"
+            android:entryValues="@array/entryvalues_sound_preference"
+            android:dialogTitle="@string/dialog_title_sound_preference" />    
+   
+    <CheckBoxPreference
+            android:key="default_vibrate"
+            android:defaultValue="true"
+            android:title="@string/title_checkbox_preference"
+            android:summary="@string/summary_checkbox_preference" />    
+    </PreferenceCategory>
+
+</PreferenceScreen>
+<!-- android:background="@drawable/blue" 
+   <Button android:id="@+id/OK_Button"
+   		  android:layout_gravity="bottom|center_horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Show Sensor Value"/>  -->

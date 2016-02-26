@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Used in Sensitivity Level configuration-->
+    <string-array name="entries_sensi_preference">
+        <item>Level 1 - High</item>
+        <item>Level 2 - Medium</item>
+        <item>Level 3 - Low</item>  
+    </string-array>
+
+    <string-array name="entryvalues_sensi_preference">
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>  
+    </string-array>
+    
+	<!-- Used in Alarm Sound configuration -->    
+    <string-array name="entries_sound_preference">
+    	<item>1 - Sound 1</item>
+   		<item>2 - Sound 2</item>
+   		<item>3 - Silent mode</item>  
+    </string-array>
+
+    <string-array name="entryvalues_sound_preference">
+        <item>one</item>
+        <item>two</item>
+        <item>silent</item>  
+    </string-array>
+    
+</resources>

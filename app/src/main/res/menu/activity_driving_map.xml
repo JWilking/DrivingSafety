@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="100"
+        android:title="@string/menu_about"/>
+    <item
+        android:id="@+id/menu_reset"
+        android:orderInCategory="100"
+        android:title="@string/menu_reset"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:title="@string/menu_settings"/>
+    <item
+        android:id="@+id/menu_show_dialog"
+        android:orderInCategory="100"
+        android:drawable="@drawable/ic_gauge_gray"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_exit"
+        android:orderInCategory="100"
+        android:title="@string/menu_exit"/>
+     <item
+        android:id="@+id/menu_location_track"
+        android:orderInCategory="100"
+        android:drawable="@drawable/ic_location_off_grey600_48dp"
+        app:showAsAction="always" />
+</menu>
