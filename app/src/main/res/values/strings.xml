@@ -13,6 +13,7 @@
     <string name="notifier">notification</string>
     <string name="sensor_view_key">sensor_view</string>
     <string name="sensor_view_dialog_title">Motion Sensor Data</string>
+    <string name="speed_label">Turn on Location Services for Speed</string>
 
     <!-- Menus -->
     <string name="menu_about">About…</string>

@@ -13,6 +13,8 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
@@ -27,14 +29,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -51,11 +56,19 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
 
     private HelperClass mHelperInstance;
 
+    private TextView mSpeedView;
+    private LocationListener mLocationListener;
+    private LocationManager mLocationManager;
+
     private Uri soundUri;  // preference related.
     private long vibration[];  // preference related.
     private String alarmInfo;  // preference related.
 
     private final static double G = SensorManager.GRAVITY_EARTH;
+    private final static double MPS_TO_MPH = 2.236936292054;
+    private final static double DEFAULT_LAT = 40.0;
+    private final static double DEFAULT_LNG = -83.0;
+    private final static float DEFAULT_ZOOM = 4;
     private final static int RG_REQUEST = 0;
 
     private SensorService mService;
@@ -105,6 +118,38 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
 //        bindService(bindIntent, mConnection, Context.BIND_AUTO_CREATE);
 
         mNotifyMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mLocationManager = (LocationManager) this
+                .getSystemService(Context.LOCATION_SERVICE);
+
+
+        mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if(location.hasAltitude() && location.hasSpeed()) {
+                    location.getLatitude();
+
+                    /* For low-speed Testing */
+                    //mSpeedView.setText("Speed: " + String.valueOf(location.getSpeed()) + " m/s");
+                    /* Set mph */
+                    mSpeedView.setText("Speed: " + String.valueOf(location.getSpeed() * MPS_TO_MPH) +  "mph");
+                } else {
+                    System.out.println("Speed Unavailable");
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
         //mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         //myReaderView = new SensorReaderView(this);
@@ -118,6 +163,7 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
 
         setContentView(R.layout.activity_driving_map);
         setUpMapIfNeeded();
+        mSpeedView = (TextView) findViewById(R.id.speed);
 
         updateValuesFromBundle(savedInstanceState);
     }
@@ -359,6 +405,8 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(DEFAULT_LAT, DEFAULT_LNG), DEFAULT_ZOOM));
         //mMap.setTrafficEnabled(true);
     }
 
@@ -435,7 +483,7 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
     /**
      * Handle user menu selection.
      * @param item Selected MenuItem
-     * @return
+     * as@return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -595,6 +643,7 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
     }
 
     private void showNotification(Long Time) {
+        Log.d(TAG, "showNotification() called");
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, NotificationActivity.class), 0);
@@ -663,11 +712,14 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
         // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
         Log.d(TAG, "stopLocationUpdates()");
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        mSpeedView.setText(getResources().getString(R.string.speed_label));
+        mLocationManager.removeUpdates(mLocationListener);
     }
 
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
+        System.out.println(location.getSpeed());
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         Log.d(TAG, "onLocationChanged(): location: (" + location.getLatitude() + ", " +
                 location.getLongitude() + "); time: " + mLastUpdateTime);
@@ -677,6 +729,10 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
         Log.d(TAG, "startLocationUpdates()");
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
+
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+                0, mLocationListener);
+
     }
 
     /**

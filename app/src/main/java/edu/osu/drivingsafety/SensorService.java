@@ -160,7 +160,7 @@ public class SensorService extends Service implements SensorListener {
     public void onSensorChanged(int sensor, float[] values) {
         // Here, according to the rules of judgment, if the sensor value
         // changes...
-        Log.d(TAG, "onSensorChanged(): toAlert: " + mHelperInstance.getToAlert() + "; isAlerted: " + mHelperInstance.getIsAlerted());
+        //Log.d(TAG, "onSensorChanged(): toAlert: " + mHelperInstance.getToAlert() + "; isAlerted: " + mHelperInstance.getIsAlerted());
         Long CurrentTime = System.currentTimeMillis();
         if (mHelperInstance.getToAlert() && !mHelperInstance.getIsAlerted()) {
             // Minimum time between alerts is 5 s.
