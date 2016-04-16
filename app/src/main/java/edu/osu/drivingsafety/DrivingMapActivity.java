@@ -132,7 +132,7 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
                     /* For low-speed Testing */
                     //mSpeedView.setText("Speed: " + String.valueOf(location.getSpeed()) + " m/s");
                     /* Set mph */
-                    mSpeedView.setText("Speed: " + String.valueOf(location.getSpeed() * MPS_TO_MPH) +  "mph");
+                    mSpeedView.setText("Speed: " + String.format("%.2f", location.getSpeed() * MPS_TO_MPH) +  " mph");
                 } else {
                     System.out.println("Speed Unavailable");
                 }
