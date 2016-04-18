@@ -42,6 +42,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -59,6 +60,9 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
     private TextView mSpeedView;
     private LocationListener mLocationListener;
     private LocationManager mLocationManager;
+
+    /* TEST: SPEED LIMIT */
+
 
     private Uri soundUri;  // preference related.
     private long vibration[];  // preference related.
@@ -91,7 +95,6 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
 
     private Intent mBindIntent;
     private static boolean mIsServiceBound = false;
-
 
     private ServiceConnection mConnection;
 
