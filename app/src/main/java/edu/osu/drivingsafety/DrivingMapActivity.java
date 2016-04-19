@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
@@ -61,6 +62,8 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
     private LocationListener mLocationListener;
     private LocationManager mLocationManager;
 
+    private AudioManager volumeControl;
+
     /* TEST: SPEED LIMIT */
 
 
@@ -74,6 +77,7 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
     private final static double DEFAULT_LNG = -83.0;
     private final static float DEFAULT_ZOOM = 4;
     private final static int RG_REQUEST = 0;
+    private final static int DRIVE_SPEED_MPH = 20;
 
     private SensorService mService;
     private SensorReaderView myReaderView;
@@ -126,6 +130,8 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
                 .getSystemService(Context.LOCATION_SERVICE);
 
 
+        volumeControl  = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
         mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -133,9 +139,50 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
                     location.getLatitude();
 
                     /* For low-speed Testing */
-                    //mSpeedView.setText("Speed: " + String.valueOf(location.getSpeed()) + " m/s");
+                    /*
+                    double speed_mps = location.getSpeed();
+
+                    mSpeedView.setText("Speed: " + String.valueOf(speed_mps) + " m/s");
+
+                    if(speed_mps > 0)
+                    {
+                        //Mute phone
+                        volumeControl.setStreamMute(AudioManager.STREAM_RING, true);
+                        volumeControl.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+                        volumeControl.setStreamMute(AudioManager.STREAM_MUSIC, true);
+                    }
+                    else
+                    {
+                        //Unmute phone
+                        volumeControl.setStreamMute(AudioManager.STREAM_RING, false);
+                        volumeControl.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
+                        volumeControl.setStreamMute(AudioManager.STREAM_MUSIC, false);
+                    }
+                    */
+
+
                     /* Set mph */
-                    mSpeedView.setText("Speed: " + String.format("%.2f", location.getSpeed() * MPS_TO_MPH) +  " mph");
+                    double speed_mph = location.getSpeed() * MPS_TO_MPH;
+
+                    mSpeedView.setText("Speed: " + String.format("%.2f", speed_mph) +  " mph");
+
+                    if(speed_mph > DRIVE_SPEED_MPH)
+                    {
+                        //Mute phone
+                        volumeControl.setStreamMute(AudioManager.STREAM_RING, true);
+                        volumeControl.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+                        volumeControl.setStreamMute(AudioManager.STREAM_MUSIC, true);
+                    }
+                    else
+                    {
+                        //Unmute phone
+                        volumeControl.setStreamMute(AudioManager.STREAM_RING, false);
+                        volumeControl.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
+                        volumeControl.setStreamMute(AudioManager.STREAM_MUSIC, false);
+                    }
+
+
+
                 } else {
                     System.out.println("Speed Unavailable");
                 }
