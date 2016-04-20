@@ -78,6 +78,7 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
     private final static float DEFAULT_ZOOM = 4;
     private final static int RG_REQUEST = 0;
     private final static int DRIVE_SPEED_MPH = 20;
+    private final static int DRIVE_SPEED_DEC = 2;
 
     private SensorService mService;
     private SensorReaderView myReaderView;
@@ -162,11 +163,14 @@ public class DrivingMapActivity extends ActionBarActivity implements GoogleApiCl
 
 
                     /* Set mph */
-                    double speed_mph = location.getSpeed() * MPS_TO_MPH;
+                    //double speed_mph = location.getSpeed() * MPS_TO_MPH;
+                    /* Set decimeters */
+                    double speed_dec = location.getSpeed() * 10;
 
-                    mSpeedView.setText("Speed: " + String.format("%.2f", speed_mph) +  " mph");
+                    mSpeedView.setText("Speed: " + String.format("%.2f", speed_dec) +  " d/s");
 
-                    if(speed_mph > DRIVE_SPEED_MPH)
+                    //if(speed_mph > DRIVE_SPEED_MPH)
+                    if(speed_dec > DRIVE_SPEED_DEC)
                     {
                         //Mute phone
                         volumeControl.setStreamMute(AudioManager.STREAM_RING, true);
